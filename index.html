@@ -1,165 +1,311 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meu Primeiro Site</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor em Movimento | Culinária</title>
+    <style>
+        /* CSS Reset & Variáveis */
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #fca048;
+            --dark: #2d3436;
+            --light: #fdfbf7;
+            --white: #ffffff;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        body { 
+            background-color: var(--light); 
+            color: var(--dark); 
+            overflow-x: hidden; 
+        }
 
-<style>
+        /* Navbar com efeito de vidro (Glassmorphism) */
+        nav {
+            position: fixed; 
+            width: 100%; 
+            padding: 25px 50px; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px); 
+            z-index: 1000; 
+            transition: all 0.4s ease;
+        }
+        
+        nav.scrolled {
+            padding: 12px 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
+        nav h1 { 
+            color: var(--primary); 
+            font-size: 24px; 
+            font-weight: 800;
+            cursor: pointer; 
+        }
+        
+        nav ul { 
+            list-style: none; 
+            display: flex; 
+            gap: 30px; 
+        }
+        
+        nav a { 
+            text-decoration: none; 
+            color: var(--dark); 
+            font-weight: 600; 
+            position: relative; 
+            transition: color 0.3s ease;
+        }
+        
+        nav a::after {
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 3px;
+            bottom: -6px; 
+            left: 0; 
+            background-color: var(--primary); 
+            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 2px;
+        }
+        
+        nav a:hover { color: var(--primary); }
+        nav a:hover::after { width: 100%; }
 
-body{
-background:#0f172a;
-color:white;
-}
+        /* Hero Section (Início) */
+        .hero {
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-align: center; 
+            background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
+            padding: 0 20px;
+        }
+        
+        .hero-content { max-width: 800px; }
+        
+        .hero h2 { 
+            font-size: 4.5rem; 
+            color: var(--dark); 
+            margin-bottom: 20px; 
+            opacity: 0; 
+            animation: slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; 
+        }
+        
+        .hero p { 
+            font-size: 1.2rem; 
+            color: #555;
+            margin-bottom: 40px; 
+            opacity: 0; 
+            animation: slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s; 
+        }
+        
+        .btn {
+            padding: 16px 36px; 
+            border: none; 
+            border-radius: 50px; 
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--white); 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0; 
+            animation: slideUp 1s ease forwards 0.6s;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-5px) scale(1.03); 
+            box-shadow: 0 15px 25px rgba(255, 107, 107, 0.4); 
+        }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 60px;
-background:#020617;
-}
+        /* Seção de Receitas com Grid */
+        .recipes-section { 
+            padding: 120px 50px; 
+            text-align: center; 
+        }
+        
+        .recipes-section h3 { 
+            font-size: 2.5rem; 
+            margin-bottom: 60px; 
+            color: var(--dark); 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 40px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Cards Interativos */
+        .card {
+            background: var(--white); 
+            border-radius: 24px; 
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); 
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            text-align: left;
+        }
+        
+        .card:hover { 
+            transform: translateY(-15px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
+        }
+        
+        .card-img-wrapper { 
+            overflow: hidden; 
+            height: 220px;
+        }
+        
+        .card-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        
+        .card:hover .card-img { transform: scale(1.1); }
+        
+        .card-content { padding: 30px; }
+        
+        .card-content h4 { 
+            font-size: 1.5rem; 
+            margin-bottom: 12px; 
+            color: var(--dark); 
+            transition: color 0.3s ease;
+        }
+        
+        .card:hover .card-content h4 { color: var(--primary); }
+        
+        .card-content p { 
+            color: #777; 
+            line-height: 1.6; 
+        }
 
-header h1{
-color:#38bdf8;
-}
+        /* Animações Keyframes */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-nav a{
-margin-left:20px;
-text-decoration:none;
-color:white;
-font-weight:bold;
-transition:0.3s;
-}
-
-nav a:hover{
-color:#38bdf8;
-}
-
-.hero{
-height:80vh;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-text-align:center;
-}
-
-.hero h2{
-font-size:50px;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:18px;
-max-width:600px;
-margin-bottom:30px;
-opacity:0.8;
-}
-
-button{
-padding:15px 35px;
-font-size:18px;
-border:none;
-border-radius:10px;
-background:#38bdf8;
-color:black;
-cursor:pointer;
-transition:0.3s;
-}
-
-button:hover{
-transform:scale(1.1);
-background:#0ea5e9;
-}
-
-.cards{
-display:flex;
-justify-content:center;
-gap:30px;
-padding:60px;
-flex-wrap:wrap;
-}
-
-.card{
-background:#020617;
-padding:30px;
-border-radius:15px;
-width:250px;
-text-align:center;
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-background:#020617;
-box-shadow:0 0 20px rgba(56,189,248,0.5);
-}
-
-footer{
-text-align:center;
-padding:30px;
-background:#020617;
-opacity:0.7;
-}
-
-</style>
-
+        /* Classes Utilitárias para Scroll Reveal (Aparecer ao rolar) */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(60px); 
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        }
+        
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-<h1>MeuSite</h1>
-<nav>
-<a href="#">Home</a>
-<a href="#">Sobre</a>
-<a href="#">Serviços</a>
-<a href="#">Contato</a>
-</nav>
-</header>
+    <nav id="navbar">
+        <h1>Sabor em Movimento</h1>
+        <ul>
+            <li><a href="#home">Início</a></li>
+            <li><a href="#receitas">Especialidades</a></li>
+        </ul>
+    </nav>
 
-<section class="hero">
-<h2>Bem-vindo ao Meu Site</h2>
-<p>Este é um exemplo de site moderno feito apenas com HTML e CSS para você testar no seu computador.</p>
-<button onclick="clicou()">Clique aqui</button>
-</section>
+    <header class="hero" id="home">
+        <div class="hero-content">
+            <h2>A Arte de Cozinhar</h2>
+            <p>Descubra texturas, aromas e receitas que transformam ingredientes simples em experiências gastronômicas inesquecíveis.</p>
+            <button class="btn">Explorar Menu</button>
+        </div>
+    </header>
 
-<section class="cards">
+    <section class="recipes-section" id="receitas">
+        <h3 class="reveal">Receitas em Destaque</h3>
+        <div class="grid">
+            
+            <div class="card reveal">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bowl Colorido" class="card-img">
+                </div>
+                <div class="card-content">
+                    <h4>Bowl Vibrante de Verão</h4>
+                    <p>Uma combinação fresca de folhas, abacate, grãos nutritivos e um molho cítrico secreto que desperta o paladar.</p>
+                </div>
+            </div>
 
-<div class="card">
-<h3>Design</h3>
-<p>Sites modernos e bonitos.</p>
-</div>
+            <div class="card reveal" style="transition-delay: 0.15s;">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pizza Artesanal" class="card-img">
+                </div>
+                <div class="card-content">
+                    <h4>Pizza Rústica Italiana</h4>
+                    <p>Massa de fermentação natural assada em forno a lenha, tomates pelados e manjericão recém-colhido.</p>
+                </div>
+            </div>
 
-<div class="card">
-<h3>Performance</h3>
-<p>Carregamento rápido e eficiente.</p>
-</div>
+            <div class="card reveal" style="transition-delay: 0.3s;">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Panquecas" class="card-img">
+                </div>
+                <div class="card-content">
+                    <h4>Panquecas de Frutas</h4>
+                    <p>Massa leve e fofinha coberta com xarope de bordo puro, mirtilos frescos e um leve toque de canela.</p>
+                </div>
+            </div>
 
-<div class="card">
-<h3>Responsivo</h3>
-<p>Funciona em celular e computador.</p>
-</div>
+        </div>
+    </section>
 
-</section>
+    <script>
+        // 1. Animação da Barra de Navegação ao rolar (encolhe e ganha sombra)
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
 
-<footer>
-<p>© 2026 Meu Site - Exemplo</p>
-</footer>
+        // 2. Animação de Surgimento (Scroll Reveal) de alta performance
+        // Utilizamos o IntersectionObserver para observar quando os elementos entram na tela
+        const revealElements = document.querySelectorAll('.reveal');
 
-<script>
-function clicou(){
-alert("Você clicou no botão! 🚀");
-}
-</script>
+        const revealOptions = {
+            threshold: 0.1, // Dispara a animação quando 10% do card estiver visível
+            rootMargin: "0px 0px -50px 0px" // Aciona levemente antes do limite inferior
+        };
 
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                
+                // Adiciona a classe que engatilha o CSS
+                entry.target.classList.add('active');
+                
+                // Para de observar após a animação rodar a primeira vez (opcional, para otimização)
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+    </script>
 </body>
 </html>
