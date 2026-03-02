@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>teste do susaki</title>
 
 <style>
@@ -10,49 +11,47 @@
 body{
 margin:0;
 font-family:Arial;
+background:black;
 color:white;
 overflow:hidden;
-background:black;
 }
 
-/* VIDEO FUNDO */
+/* VIDEO */
 
-video{
+#bgVideo{
 position:fixed;
-right:0;
-bottom:0;
-min-width:100%;
-min-height:100%;
+top:0;
+left:0;
+width:100%;
+height:100%;
 object-fit:cover;
 z-index:-1;
 }
 
-/* BLUR INICIAL */
+/* BLUR */
 
 #blur{
 position:fixed;
 width:100%;
-height:100vh;
-background:rgba(0,0,0,0.5);
-backdrop-filter:blur(20px);
+height:100%;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:40px;
-font-weight:bold;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(25px);
 cursor:pointer;
-transition:0.5s;
 }
 
 /* CONTEUDO */
 
-#conteudo{
+#content{
+display:none;
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
 text-align:center;
-display:none;
 }
 
 h1{
@@ -64,12 +63,12 @@ margin-bottom:40px;
 
 .icons{
 display:flex;
-gap:50px;
+gap:60px;
 justify-content:center;
 }
 
 .icons img{
-width:90px;
+width:100px;
 cursor:pointer;
 transition:0.3s;
 }
@@ -83,26 +82,26 @@ transform:scale(1.2);
 
 <body>
 
-<video autoplay muted loop>
-<source src="video.mp4" type="video/mp4">
+<video id="bgVideo" autoplay muted loop playsinline>
+<source src="./video.mp4" type="video/mp4">
 </video>
 
 <div id="blur">
 Toque para continuar
 </div>
 
-<div id="conteudo">
+<div id="content">
 
 <h1>teste do susaki</h1>
 
 <div class="icons">
 
 <a href="https://www.roblox.com" target="_blank">
-<img src="https://tr.rbxcdn.com/180DAY-57c6c93c2c91e0c59f5b4e27c0a16e33/420/420/Image/Webp/noFilter">
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.svg">
 </a>
 
 <a href="https://www.youtube.com" target="_blank">
-<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
 </a>
 
 </div>
@@ -113,12 +112,9 @@ Toque para continuar
 
 document.getElementById("blur").onclick = function(){
 
-this.style.opacity="0"
-
-setTimeout(()=>{
 this.style.display="none"
-document.getElementById("conteudo").style.display="block"
-},500)
+
+document.getElementById("content").style.display="block"
 
 }
 
