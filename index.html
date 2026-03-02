@@ -1,311 +1,401 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sabor em Movimento | Culinária</title>
-    <style>
-        /* CSS Reset & Variáveis */
-        :root {
-            --primary: #ff6b6b;
-            --secondary: #fca048;
-            --dark: #2d3436;
-            --light: #fdfbf7;
-            --white: #ffffff;
-        }
-        
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        }
-        
-        body { 
-            background-color: var(--light); 
-            color: var(--dark); 
-            overflow-x: hidden; 
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Concrete Green — All-in-One Demo</title>
+  <meta name="description" content="Concrete Green — demo single-file PWA: map, plant scanner, ledger, vine animation, offline. Replace MAPBOX_TOKEN before use." />
+  <link rel="manifest" href="manifest.json">
+  <!-- Mapbox GL (replace token) -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    /* Design tokens (Industrial-Organic) */
+    :root{
+      --city-foundation:#2F2F2F; /* Deep Anthracite */
+      --chlorophyll:#39FF14;     /* Active Neon Green */
+      --muted-stone:#575757;
+      --paper-ivory:#F7F6F3;
+      --accent-ink:#0F0F0F;
+      --glass-ghost:rgba(255,255,255,0.04);
+      --max-width:1120px;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--city-foundation);color:var(--paper-ivory);font-family:"Playfair Display",serif}
+    .app{max-width:var(--max-width);margin:24px auto;padding:20px;border-radius:var(--radius)}
 
-        /* Navbar com efeito de vidro (Glassmorphism) */
-        nav {
-            position: fixed; 
-            width: 100%; 
-            padding: 25px 50px; 
-            display: flex;
-            justify-content: space-between; 
-            align-items: center; 
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px); 
-            z-index: 1000; 
-            transition: all 0.4s ease;
-        }
-        
-        nav.scrolled {
-            padding: 12px 50px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
+    header{display:flex;gap:16px;align-items:center}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{margin:0;color:var(--muted-stone)}
 
-        nav h1 { 
-            color: var(--primary); 
-            font-size: 24px; 
-            font-weight: 800;
-            cursor: pointer; 
-        }
-        
-        nav ul { 
-            list-style: none; 
-            display: flex; 
-            gap: 30px; 
-        }
-        
-        nav a { 
-            text-decoration: none; 
-            color: var(--dark); 
-            font-weight: 600; 
-            position: relative; 
-            transition: color 0.3s ease;
-        }
-        
-        nav a::after {
-            content: ''; 
-            position: absolute; 
-            width: 0; 
-            height: 3px;
-            bottom: -6px; 
-            left: 0; 
-            background-color: var(--primary); 
-            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 2px;
-        }
-        
-        nav a:hover { color: var(--primary); }
-        nav a:hover::after { width: 100%; }
+    .layout{display:grid;grid-template-columns:1fr 420px;gap:18px;margin-top:18px}
 
-        /* Hero Section (Início) */
-        .hero {
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            text-align: center; 
-            background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
-            padding: 0 20px;
-        }
-        
-        .hero-content { max-width: 800px; }
-        
-        .hero h2 { 
-            font-size: 4.5rem; 
-            color: var(--dark); 
-            margin-bottom: 20px; 
-            opacity: 0; 
-            animation: slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s; 
-        }
-        
-        .hero p { 
-            font-size: 1.2rem; 
-            color: #555;
-            margin-bottom: 40px; 
-            opacity: 0; 
-            animation: slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.4s; 
-        }
-        
-        .btn {
-            padding: 16px 36px; 
-            border: none; 
-            border-radius: 50px; 
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: var(--white); 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3); 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0; 
-            animation: slideUp 1s ease forwards 0.6s;
-        }
-        
-        .btn:hover { 
-            transform: translateY(-5px) scale(1.03); 
-            box-shadow: 0 15px 25px rgba(255, 107, 107, 0.4); 
-        }
+    /* Left column - interactive area */
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.45)}
+    #map{height:520px;border-radius:8px;overflow:hidden}
 
-        /* Seção de Receitas com Grid */
-        .recipes-section { 
-            padding: 120px 50px; 
-            text-align: center; 
-        }
-        
-        .recipes-section h3 { 
-            font-size: 2.5rem; 
-            margin-bottom: 60px; 
-            color: var(--dark); 
-        }
-        
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 40px; 
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        /* Cards Interativos */
-        .card {
-            background: var(--white); 
-            border-radius: 24px; 
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); 
-            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-            cursor: pointer;
-            text-align: left;
-        }
-        
-        .card:hover { 
-            transform: translateY(-15px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
-        }
-        
-        .card-img-wrapper { 
-            overflow: hidden; 
-            height: 220px;
-        }
-        
-        .card-img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-        }
-        
-        .card:hover .card-img { transform: scale(1.1); }
-        
-        .card-content { padding: 30px; }
-        
-        .card-content h4 { 
-            font-size: 1.5rem; 
-            margin-bottom: 12px; 
-            color: var(--dark); 
-            transition: color 0.3s ease;
-        }
-        
-        .card:hover .card-content h4 { color: var(--primary); }
-        
-        .card-content p { 
-            color: #777; 
-            line-height: 1.6; 
-        }
+    /* Right column - controls */
+    .controls{display:flex;flex-direction:column;gap:12px}
+    .card{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    button{font-family:inherit;padding:8px 12px;border-radius:8px;border:0;background:var(--accent-ink);color:var(--paper-ivory);cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(57,255,20,0.08)}
+    .btn-neon{box-shadow:0 0 12px rgba(57,255,20,0.12);border:1px solid rgba(57,255,20,0.18)}
 
-        /* Animações Keyframes */
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .scanner-preview{width:100%;height:160px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#888}
+    .ledger-list{max-height:200px;overflow:auto}
+    .ledger-item{padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.15)}
 
-        /* Classes Utilitárias para Scroll Reveal (Aparecer ao rolar) */
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(60px); 
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); 
-        }
-        
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0); 
-        }
-    </style>
+    footer{margin-top:18px;color:#999;font-size:0.85rem}
+
+    /* Vine SVG overlay (pointer-events none) */
+    #vines{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;z-index:9}
+
+    /* compact scanner modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.6));z-index:40}
+    .modal .box{width:720px;max-width:94%;background:var(--city-foundation);padding:12px;border-radius:10px}
+    video{width:100%;border-radius:8px}
+    .row{display:flex;gap:8px;align-items:center}
+    .small{font-size:0.86rem;color:#bbb}
+
+    @media (max-width:980px){.layout{grid-template-columns:1fr;}.app{margin:10px}}
+  </style>
 </head>
 <body>
-
-    <nav id="navbar">
-        <h1>Sabor em Movimento</h1>
-        <ul>
-            <li><a href="#home">Início</a></li>
-            <li><a href="#receitas">Especialidades</a></li>
-        </ul>
-    </nav>
-
-    <header class="hero" id="home">
-        <div class="hero-content">
-            <h2>A Arte de Cozinhar</h2>
-            <p>Descubra texturas, aromas e receitas que transformam ingredientes simples em experiências gastronômicas inesquecíveis.</p>
-            <button class="btn">Explorar Menu</button>
-        </div>
+  <svg id="vines" aria-hidden="true"></svg>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Concrete Green — Demo</h1>
+        <p class="lead">All-in-one single-file demo: map, scanner, ledger (offline-friendly), vine animation.</p>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div class="small">Prototype — replace <code>MAPBOX_ACCESS_TOKEN</code> in the code for live map.</div>
+      </div>
     </header>
 
-    <section class="recipes-section" id="receitas">
-        <h3 class="reveal">Receitas em Destaque</h3>
-        <div class="grid">
-            
-            <div class="card reveal">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bowl Colorido" class="card-img">
-                </div>
-                <div class="card-content">
-                    <h4>Bowl Vibrante de Verão</h4>
-                    <p>Uma combinação fresca de folhas, abacate, grãos nutritivos e um molho cítrico secreto que desperta o paladar.</p>
-                </div>
-            </div>
-
-            <div class="card reveal" style="transition-delay: 0.15s;">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pizza Artesanal" class="card-img">
-                </div>
-                <div class="card-content">
-                    <h4>Pizza Rústica Italiana</h4>
-                    <p>Massa de fermentação natural assada em forno a lenha, tomates pelados e manjericão recém-colhido.</p>
-                </div>
-            </div>
-
-            <div class="card reveal" style="transition-delay: 0.3s;">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Panquecas" class="card-img">
-                </div>
-                <div class="card-content">
-                    <h4>Panquecas de Frutas</h4>
-                    <p>Massa leve e fofinha coberta com xarope de bordo puro, mirtilos frescos e um leve toque de canela.</p>
-                </div>
-            </div>
-
+    <div class="layout">
+      <div class="panel">
+        <div id="map"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <button id="openScanner" class="btn-neon">Open Plant Scanner</button>
+          <button id="addRandom" class="ghost">Add Random Garden (demo)</button>
+          <div style="flex:1"></div>
+          <div class="small">Offline-ready • PWA shell</div>
         </div>
-    </section>
+      </div>
 
-    <script>
-        // 1. Animação da Barra de Navegação ao rolar (encolhe e ganha sombra)
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+      <aside class="controls">
+        <div class="card">
+          <strong>Guardian Dashboard</strong>
+          <div style="margin-top:8px" id="dashboard">
+            <div>Bio-Rank: <span id="bioRank">—</span></div>
+            <div>Carbon sequestered: <span id="carbon">—</span> kg</div>
+            <div>Active gardens: <span id="gardensCount">0</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong>Seed & Tool Ledger</strong>
+          <div style="margin-top:8px">
+            <input id="itemText" placeholder="Example: native wildflower seeds" style="width:100%;padding:8px;border-radius:8px;border:0;background:#0c0c0c;color:#ddd" />
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="createItem">Create Listing</button>
+              <button id="syncBtn" class="ghost">Sync (demo)</button>
+            </div>
+            <div class="ledger-list" id="ledgerList" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <strong>Scan result (last)</strong>
+          <div class="scanner-preview" id="scanResult">No scan yet</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      This demo focuses on front-end behaviours and local/offline-first flow. Replace the placeholder Mapbox token for a live map. Images and ML stay local by default.
+    </footer>
+  </div>
+
+  <!-- Scanner modal -->
+  <div class="modal" id="scannerModal">
+    <div class="box">
+      <div class="row">
+        <strong>Plant Scanner — Spatial Light Analysis (client-side)</strong>
+        <div style="margin-left:auto"><button id="closeScanner" class="ghost">Close</button></div>
+      </div>
+      <div style="margin-top:8px">Follow the on-screen guide: slowly pan the camera across the target spot for ~5 seconds.</div>
+      <video id="cam" autoplay playsinline muted></video>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <button id="startScan">Start Scan</button>
+        <div id="scanStatus" class="small">idle</div>
+        <div style="flex:1"></div>
+        <div class="small">Confidence and suggestions appear after the scan.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimal manifest file (created dynamically when served from a server, otherwise ignored locally) -->
+
+  <!-- External libs -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+  <script>
+    /* ========================
+       Configuration (edit here)
+       ======================== */
+    const MAPBOX_ACCESS_TOKEN = 'MAPBOX_ACCESS_TOKEN'; // <-- replace with your token for live map
+    mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
+    /* ========================
+       Small utilities
+       ======================== */
+    function $(s){return document.querySelector(s)}
+    function rnd(lat=0,lng=0,rad=0.01){return [lat + (Math.random()-0.5)*rad, lng + (Math.random()-0.5)*rad]}
+
+    /* ========================
+       Simple client-side DB (IndexedDB wrapper)
+       ======================== */
+    const DB = (function(){
+      const name='concrete-green-demo';
+      const version=1;
+      let db;
+      function open(){
+        return new Promise((res,rej)=>{
+          const r=indexedDB.open(name,version);
+          r.onupgradeneeded=(e)=>{
+            const d=e.target.result;
+            if(!d.objectStoreNames.contains('ledger')) d.createObjectStore('ledger',{keyPath:'id'});
+            if(!d.objectStoreNames.contains('gardens')) d.createObjectStore('gardens',{keyPath:'id'});
+          };
+          r.onsuccess=(e)=>{db=e.target.result;res(db)};r.onerror=(e)=>rej(e);
+        })
+      }
+      async function put(store,obj){await open();return new Promise((res,rej)=>{const tx=db.transaction(store,'readwrite');tx.objectStore(store).put(obj);tx.oncomplete=()=>res(obj);tx.onerror=(e)=>rej(e)}))}
+      async function all(store){await open();return new Promise((res,rej)=>{const tx=db.transaction(store,'readonly');const cur=tx.objectStore(store).openCursor();const out=[];cur.onsuccess=(e)=>{const c=e.target.result; if(c){out.push(c.value); c.continue()} else res(out)};cur.onerror=(e)=>rej(e)})}
+      async function get(store,key){await open();return new Promise((res,rej)=>{const tx=db.transaction(store,'readonly');const req=tx.objectStore(store).get(key);req.onsuccess=(e)=>res(e.target.result);req.onerror=(e)=>rej(e)})}
+      return {put,all,get}
+    })();
+
+    /* ========================
+       Map (Mapbox) setup — fallback to simple static view if token missing
+       ======================== */
+    let map;
+    let gardens=[];
+    function initMap(){
+      if(!MAPBOX_ACCESS_TOKEN || MAPBOX_ACCESS_TOKEN.includes('MAPBOX')){
+        // Token not set — show a simple fallback static map using a tiled image (demo)
+        const el = document.getElementById('map');
+        el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888">Replace MAPBOX_ACCESS_TOKEN in the source to enable the interactive map.</div>';
+        return;
+      }
+      map = new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/dark-v11',center:[-38.764, -10.276],zoom:12});
+      map.addControl(new mapboxgl.NavigationControl());
+      map.on('load',()=>{
+        // Add a source for gardens as geojson (initially empty)
+        map.addSource('gardens',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+        map.addLayer({id:'garden-circles',type:'circle',source:'gardens',paint:{'circle-color':'#39ff14','circle-radius':['interpolate',['linear'],['get','size'],1,6,10,18],'circle-opacity':0.9}});
+        map.on('click','garden-circles', (e)=>{
+          const feat = e.features[0];
+          const props = feat.properties;
+          alert(`Garden: ${props.name}\nSpecies: ${props.species}`);
         });
+        loadGardensToMap();
+      });
+    }
 
-        // 2. Animação de Surgimento (Scroll Reveal) de alta performance
-        // Utilizamos o IntersectionObserver para observar quando os elementos entram na tela
-        const revealElements = document.querySelectorAll('.reveal');
+    async function loadGardensToMap(){
+      const items = await DB.all('gardens');
+      gardens = items || [];
+      if(map && map.getSource('gardens')){
+        const features = gardens.map(g=>({type:'Feature',geometry:{type:'Point',coordinates:[g.lng,g.lat]},properties:{name:g.name||'garden',species:(g.species||[]).join(', '),size:g.size||1}}));
+        map.getSource('gardens').setData({type:'FeatureCollection',features});
+        $('#gardensCount').textContent = gardens.length;
+      }
+    }
 
-        const revealOptions = {
-            threshold: 0.1, // Dispara a animação quando 10% do card estiver visível
-            rootMargin: "0px 0px -50px 0px" // Aciona levemente antes do limite inferior
-        };
+    /* ========================
+       Simple vine animation along viewport edges reacting to scroll
+       ======================== */
+    (function vineInit(){
+      const svg = document.getElementById('vines');
+      const xmlns = 'http://www.w3.org/2000/svg';
+      svg.setAttribute('width','100%');svg.setAttribute('height','100%');
+      // Left vine path
+      const path = document.createElementNS(xmlns,'path');
+      path.setAttribute('stroke', 'rgba(57,255,20,0.12)');
+      path.setAttribute('fill','none');
+      path.setAttribute('stroke-width','3');
+      path.setAttribute('stroke-linecap','round');
+      path.setAttribute('d','M12,0 C8,120 12,240 12,360 12,480 12,600 12,9999');
+      path.style.filter='drop-shadow(0 6px 12px rgba(0,0,0,0.6))';
+      svg.appendChild(path);
 
-        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                
-                // Adiciona a classe que engatilha o CSS
-                entry.target.classList.add('active');
-                
-                // Para de observar após a animação rodar a primeira vez (opcional, para otimização)
-                observer.unobserve(entry.target);
-            });
-        }, revealOptions);
+      // Right moss path (mirror)
+      const path2 = document.createElementNS(xmlns,'path');
+      path2.setAttribute('stroke','rgba(57,255,20,0.06)');path2.setAttribute('fill','none');path2.setAttribute('stroke-width','2');
+      path2.setAttribute('d','Mcalc(100%-12),0 C calc(100%-8),120 calc(100%-12),240 calc(100%-12),360');
+      svg.appendChild(path2);
 
-        revealElements.forEach(el => {
-            revealOnScroll.observe(el);
-        });
-    </script>
+      // Animate growth with scroll velocity
+      let lastScroll = window.scrollY; let lastTime = performance.now(); let dash = 0;
+      function tick(t){
+        const y = window.scrollY; const dt = t-lastTime; const speed = (y-lastScroll)/Math.max(1,dt);
+        lastScroll = y; lastTime = t;
+        dash = (dash + Math.abs(speed)*6) % 1200;
+        path.style.strokeDasharray = '8 8 8 8';
+        path.style.strokeDashoffset = -dash;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    /* ========================
+       Plant scanner: basic client-side heuristics + TF.js small mobilenet usage fallback
+       ======================== */
+    let stream=null; const video = $('#cam');
+    async function openCamera(){
+      try{stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); video.srcObject=stream; await video.play();}catch(e){console.warn('camera failed',e); alert('Camera access denied or not available.');}
+    }
+
+    function stopCamera(){ if(stream){stream.getTracks().forEach(t=>t.stop()); video.srcObject=null; stream=null;} }
+
+    async function analyzeFrames(frames=6){
+      // capture frames from video into a canvas and compute rough metrics
+      const w = video.videoWidth || 640; const h = video.videoHeight || 480;
+      const c = document.createElement('canvas'); c.width=224; c.height=224; const ctx=c.getContext('2d');
+      let skyPixelsTotal=0, total=0, brightCount=0, verticalEdge=0;
+      for(let i=0;i<frames;i++){
+        ctx.drawImage(video,0,0,224,224);
+        const d = ctx.getImageData(0,0,224,224).data;
+        for(let p=0;p<d.length;p+=4){
+          total++;
+          const r=d[p], g=d[p+1], b=d[p+2];
+          // sky-ish pixel heuristic: blue predominance and brightness
+          if(b > r+10 && b > g+10 && b > 80){ skyPixelsTotal++; }
+          if((r+g+b)/3 > 200) brightCount++;
+        }
+        // simple vertical edges using Sobel-ish by sampling column differences
+        const colSum = 0; // skip heavy ops for performance in demo
+        await new Promise(r=>setTimeout(r,120));
+      }
+      const skyRatio = skyPixelsTotal/total;
+      const brightnessRatio = brightCount/total;
+      // heuristics -> outputs
+      const solar_hours = Math.round(Math.min(10, Math.max(0, skyRatio*12 + brightnessRatio*4)));
+      const wind_index = Math.round(Math.min(10, Math.max(0, (1 - skyRatio)*8 + Math.random()*2)));
+      const humidity_proxy = Math.round(Math.min(10, Math.max(0, (1-brightnessRatio)*6 + Math.random()*2)));
+      // species suggestions (toy repository)
+      const suggestions = pickSpeciesByClimate(solar_hours, humidity_proxy);
+      return {solar_hours,wind_index,humidity_proxy,suggestions,confidence:Math.round((skyRatio*0.6+brightnessRatio*0.4)*100)};
+    }
+
+    function pickSpeciesByClimate(solar,humi){
+      // tiny demo species mapping
+      const pool = [];
+      if(solar>=8){ pool.push('Lavandula (sun-loving)'); pool.push('Native Salvia'); }
+      else if(solar>=4){ pool.push('Bromeliad (partial sun)'); pool.push('Heuchera'); }
+      else { pool.push('Fern (shade)'); pool.push('Moss mix (ground)'); }
+      if(humi>=6) pool.push('Sedge mixture');
+      return Array.from(new Set(pool)).slice(0,4);
+    }
+
+    /* Try to also load a small mobilenet model via TF.js and run a lightweight predict (optional)
+       NOTE: this demo does NOT provide a trained solar-hours model — we use heuristics above.
+    */
+    async function startTF(){
+      if(!window.tf) return null;
+      try{
+        // load a mobilenet feature extractor to demonstrate tf inference pipeline (no custom head)
+        const model = await tf.loadGraphModel('https://tfhub.dev/google/imagenet/mobilenet_v2_100_224/classification/5', {fromTFHub:true});
+        return model;
+      }catch(e){console.warn('tf model failed',e);return null}
+    }
+
+    /* ========================
+       UI wiring
+       ======================== */
+    $('#openScanner').addEventListener('click',async ()=>{
+      $('#scannerModal').style.display='flex'; await openCamera(); $('#scanStatus').textContent='ready';
+    });
+    $('#closeScanner').addEventListener('click',()=>{ $('#scannerModal').style.display='none'; stopCamera(); $('#scanStatus').textContent='idle'; });
+
+    $('#startScan').addEventListener('click',async ()=>{
+      $('#scanStatus').textContent='scanning...';
+      try{
+        const res = await analyzeFrames(8);
+        $('#scanStatus').textContent='done';
+        $('#scanResult').textContent = `Solar: ${res.solar_hours}h • Wind index: ${res.wind_index}/10 • Humidity proxy: ${res.humidity_proxy}/10 • Confidence: ${res.confidence}%\nSuggestions: ${res.suggestions.join(', ')}`;
+        // store a garden (approx geolocation + random offset) demo
+        navigator.geolocation.getCurrentPosition(async (pos)=>{
+          const lat = pos.coords.latitude; const lng = pos.coords.longitude; const id = 'g'+Date.now();
+          const garden = {id,lat:lat+(Math.random()-0.5)/500, lng:lng+(Math.random()-0.5)/500, name:'Scanner garden', species:res.suggestions, size:1};
+          await DB.put('gardens',garden); await loadGardensToMap();
+        }, async ()=>{
+          // if geolocation fails, store at city center demo
+          const [lat,lng] = [-10.276,-38.764]; const id='g'+Date.now();
+          const garden = {id,lat:lat+(Math.random()-0.5)/500, lng:lng+(Math.random()-0.5)/500, name:'Scanner garden (approx)', species:res.suggestions, size:1};
+          await DB.put('gardens',garden); await loadGardensToMap();
+        },{timeout:5000});
+      }catch(e){console.warn(e); $('#scanStatus').textContent='error';}
+    });
+
+    $('#addRandom').addEventListener('click', async ()=>{
+      const id='g'+Date.now(); const [lat,lng] = rnd(-10.276,-38.764,0.05); const garden = {id,lat,lng,name:'Community garden',species:['Native grasses'],size:Math.ceil(Math.random()*3)}; await DB.put('gardens',garden); await loadGardensToMap();
+    });
+
+    // ledger create
+    $('#createItem').addEventListener('click', async ()=>{
+      const text = $('#itemText').value.trim(); if(!text) return alert('Add item description');
+      const item = {id:'i'+Date.now(),text,created:Date.now(),owner:'local',available:true};
+      await DB.put('ledger',item); $('#itemText').value=''; renderLedger();
+    });
+
+    async function renderLedger(){ const items = await DB.all('ledger'); const c = $('#ledgerList'); c.innerHTML=''; items.forEach(it=>{ const div=document.createElement('div'); div.className='ledger-item'; div.textContent = `${it.text} — ${new Date(it.created).toLocaleString()}`; c.appendChild(div); }); }
+
+    // sync demo (no server in this single-file demo)
+    $('#syncBtn').addEventListener('click',()=>{ alert('Sync would run here (demo mode). In a real deployment this triggers backend sync / WebRTC flow.'); });
+
+    /* Dashboard update */
+    async function updateDashboard(){ const gardens = await DB.all('gardens'); const items = await DB.all('ledger'); $('#gardensCount').textContent=gardens.length; $('#bioRank').textContent = Math.min(100, 10 + gardens.length*6 + Math.floor(items.length/2)); $('#carbon').textContent = (gardens.length*1.2).toFixed(1); }
+
+    /* Periodic update */
+    setInterval(()=>{renderLedger(); updateDashboard();},1200);
+
+    /* ========================
+       PWA: minimal service worker registration
+       ======================== */
+    if('serviceWorker' in navigator){
+      try{navigator.serviceWorker.register('sw.js').then(()=>console.log('sw registered')).catch(e=>console.warn('sw fail',e));}catch(e){console.warn('sw',e)}
+    }
+
+    /* ========================
+       Boot
+       ======================== */
+    (function boot(){ initMap(); renderLedger(); updateDashboard(); })();
+
+  </script>
+
+  <!-- Service Worker (simple caching) -->
+  <script>
+    // We dynamically create a tiny service worker file when running on a server. If you're opening the HTML file locally (file://), the registration will silently fail.
+    const swCode = `
+      const CACHE_NAME = 'concrete-green-shell-v1';
+      const assets = ['/', '/index.html'];
+      self.addEventListener('install', e=>{ self.skipWaiting(); e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(assets)).catch(()=>{})); });
+      self.addEventListener('activate', e=>{ e.waitUntil(self.clients.claim()); });
+      self.addEventListener('fetch', e=>{ e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('/')))); });
+    `;
+    // Create a blob and an object URL so that registration can reference sw.js when served (only works on server origins)
+    try{
+      const blob = new Blob([swCode],{type:'text/javascript'});
+      const url = URL.createObjectURL(blob);
+      // create a fake sw.js file on the same origin by intercepting fetch to /sw.js? Not possible in file:// environment; leave to server to serve a proper sw.js
+      // For convenience, create an inline fetch handler that responds with this blob if /sw.js requested — only works if the server and this script cooperate.
+      // Note: many static hosts ignore this approach; for production, place a real sw.js at site root.
+    }catch(e){console.warn('sw blob',e)}
+  </script>
 </body>
 </html>
