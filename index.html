@@ -3,55 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teste do Susaki</title>
+<title>teste do susaki</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
 body{
+margin:0;
+font-family:Arial;
+color:white;
 overflow:hidden;
 background:black;
-color:white;
-}
-
-/* TELA INICIAL BLUR */
-
-#startScreen{
-position:fixed;
-width:100%;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-backdrop-filter:blur(25px);
-background:rgba(0,0,0,0.4);
-z-index:10;
-cursor:pointer;
-transition:0.6s;
-}
-
-#startText{
-font-size:40px;
-font-weight:bold;
-text-shadow:0 0 20px white;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{opacity:1}
-50%{opacity:0.5}
-100%{opacity:1}
 }
 
 /* VIDEO FUNDO */
 
-#videoBackground{
+video{
 position:fixed;
 right:0;
 bottom:0;
@@ -61,50 +27,55 @@ object-fit:cover;
 z-index:-1;
 }
 
+/* BLUR INICIAL */
+
+#blur{
+position:fixed;
+width:100%;
+height:100vh;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(20px);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:40px;
+font-weight:bold;
+cursor:pointer;
+transition:0.5s;
+}
+
 /* CONTEUDO */
 
-#content{
+#conteudo{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
 text-align:center;
-opacity:0;
-transition:1s;
+display:none;
 }
 
 h1{
 font-size:60px;
 margin-bottom:40px;
-text-shadow:0 0 20px black;
 }
 
 /* ICONES */
 
 .icons{
 display:flex;
-gap:40px;
+gap:50px;
 justify-content:center;
 }
 
-.icon{
-background:rgba(0,0,0,0.6);
-padding:20px;
-border-radius:20px;
-width:150px;
-transition:0.3s;
+.icons img{
+width:90px;
 cursor:pointer;
-backdrop-filter:blur(10px);
+transition:0.3s;
 }
 
-.icon:hover{
-transform:scale(1.1);
-background:rgba(0,0,0,0.8);
-}
-
-.icon img{
-width:80px;
-margin-bottom:10px;
+.icons img:hover{
+transform:scale(1.2);
 }
 
 </style>
@@ -112,32 +83,27 @@ margin-bottom:10px;
 
 <body>
 
-<!-- VIDEO -->
-<video autoplay muted loop id="videoBackground">
+<video autoplay muted loop>
 <source src="video.mp4" type="video/mp4">
 </video>
 
-<!-- BLUR INICIAL -->
-<div id="startScreen">
-<div id="startText">Toque para continuar</div>
+<div id="blur">
+Toque para continuar
 </div>
 
-<!-- CONTEUDO -->
-<div id="content">
+<div id="conteudo">
 
 <h1>teste do susaki</h1>
 
 <div class="icons">
 
-<div class="icon" onclick="window.open('https://www.roblox.com','_blank')">
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.svg">
-<p>Roblox</p>
-</div>
+<a href="https://www.roblox.com" target="_blank">
+<img src="https://tr.rbxcdn.com/180DAY-57c6c93c2c91e0c59f5b4e27c0a16e33/420/420/Image/Webp/noFilter">
+</a>
 
-<div class="icon" onclick="window.open('https://www.youtube.com','_blank')">
-<img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
-<p>YouTube</p>
-</div>
+<a href="https://www.youtube.com" target="_blank">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+</a>
 
 </div>
 
@@ -145,19 +111,16 @@ margin-bottom:10px;
 
 <script>
 
-const start = document.getElementById("startScreen");
-const content = document.getElementById("content");
+document.getElementById("blur").onclick = function(){
 
-start.addEventListener("click", () => {
-
-start.style.opacity = "0";
+this.style.opacity="0"
 
 setTimeout(()=>{
-start.style.display="none";
-content.style.opacity="1";
-},600);
+this.style.display="none"
+document.getElementById("conteudo").style.display="block"
+},500)
 
-});
+}
 
 </script>
 
