@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Primeiro Site</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+background:#020617;
+}
+
+header h1{
+color:#38bdf8;
+}
+
+nav a{
+margin-left:20px;
+text-decoration:none;
+color:white;
+font-weight:bold;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#38bdf8;
+}
+
+.hero{
+height:80vh;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+text-align:center;
+}
+
+.hero h2{
+font-size:50px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:18px;
+max-width:600px;
+margin-bottom:30px;
+opacity:0.8;
+}
+
+button{
+padding:15px 35px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:#38bdf8;
+color:black;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.1);
+background:#0ea5e9;
+}
+
+.cards{
+display:flex;
+justify-content:center;
+gap:30px;
+padding:60px;
+flex-wrap:wrap;
+}
+
+.card{
+background:#020617;
+padding:30px;
+border-radius:15px;
+width:250px;
+text-align:center;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+background:#020617;
+box-shadow:0 0 20px rgba(56,189,248,0.5);
+}
+
+footer{
+text-align:center;
+padding:30px;
+background:#020617;
+opacity:0.7;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>MeuSite</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#">Sobre</a>
+<a href="#">Serviços</a>
+<a href="#">Contato</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Bem-vindo ao Meu Site</h2>
+<p>Este é um exemplo de site moderno feito apenas com HTML e CSS para você testar no seu computador.</p>
+<button onclick="clicou()">Clique aqui</button>
+</section>
+
+<section class="cards">
+
+<div class="card">
+<h3>Design</h3>
+<p>Sites modernos e bonitos.</p>
+</div>
+
+<div class="card">
+<h3>Performance</h3>
+<p>Carregamento rápido e eficiente.</p>
+</div>
+
+<div class="card">
+<h3>Responsivo</h3>
+<p>Funciona em celular e computador.</p>
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Meu Site - Exemplo</p>
+</footer>
+
+<script>
+function clicou(){
+alert("Você clicou no botão! 🚀");
+}
+</script>
+
+</body>
+</html>
