@@ -1,208 +1,190 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Coração — Clique até 100%</title>
-
-<!-- favicon embutido (evita 404 no console) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ff3b5c'/%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coração</title>
 
 <style>
-  :root{--bg:#071025;--card:#0b1220;--accent:#ff3b5c;--bar:#1e293b}
-  *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial}
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,#041124 0%,#071025 100%);color:#e6eef8}
-  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-  .card{width:360px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:14px;padding:20px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 12px 36px rgba(2,6,23,0.6);text-align:center;position:relative;overflow:visible}
-  h1{font-size:18px;margin:6px 0 8px}
-  .subtitle{font-size:13px;color:rgba(230,238,248,0.75);margin-bottom:12px}
 
-  .heart-btn{width:120px;height:120px;margin:0 auto;display:grid;place-items:center;cursor:pointer;user-select:none}
-  svg.heart{width:100%;height:100%;transition:transform 160ms cubic-bezier(.2,.9,.3,1);filter:drop-shadow(0 8px 24px rgba(255,59,92,0.12))}
-  svg.heart.pop{transform:scale(1.12)}
-  svg.heart.full{filter:drop-shadow(0 14px 32px rgba(255,59,92,0.28))}
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#071025;
+color:white;
+font-family:Arial;
+}
 
-  .progress-wrap{margin-top:18px;background:var(--bar);height:16px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
-  .progress-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#ff8a4d);transition:width 300ms ease}
-  .percent{margin-top:10px;font-weight:700}
+.card{
+text-align:center;
+width:320px;
+}
 
-  /* confetti pieces */
-  .confetti{position:fixed;left:0;top:0;right:0;bottom:0;pointer-events:none;overflow:visible}
-  .confetti-piece{position:absolute;width:10px;height:14px;border-radius:2px;opacity:0;transform-origin:center;animation:confettiMove 1200ms linear forwards}
+.heart{
+font-size:80px;
+cursor:pointer;
+user-select:none;
+transition:transform .15s;
+}
 
-  @keyframes confettiMove {
-    0% { transform: translateY(0) rotate(0) scale(1); opacity:1 }
-    100% { transform: translateY(420px) rotate(720deg) scale(.9); opacity:0 }
-  }
+.heart:active{
+transform:scale(1.2);
+}
 
-  /* tela final (fade in) */
-  #finalScreen{
-    position:fixed; inset:0; background:rgba(3,6,12,0.92); display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:18px; gap:14px; opacity:0; pointer-events:none; transition:opacity .9s ease;
-  }
-  #finalScreen.show{ opacity:1; pointer-events:auto }
+.bar{
+height:16px;
+background:#1e293b;
+border-radius:10px;
+overflow:hidden;
+margin-top:20px;
+}
 
-  #finalVideo{ width:min(640px,92vw); max-height:60vh; border-radius:10px; background:black }
-  #finalText{ color:#e6eef8; max-width:720px; text-align:center; font-size:16px; line-height:1.4 }
+.fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff3b5c,#ff8a4d);
+transition:.3s;
+}
 
-  /* acessibilidade */
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  @media (max-width:420px){
-    .card{width:92vw;padding:18px}
-    .heart-btn{width:104px;height:104px}
-  }
+#percent{
+margin-top:10px;
+font-weight:bold;
+}
+
+/* tela final */
+
+#final{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:1s;
+}
+
+#final.show{
+opacity:1;
+pointer-events:auto;
+}
+
+video{
+width:90%;
+max-width:500px;
+margin-bottom:20px;
+border-radius:10px;
+}
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+background:red;
+animation:fall 1.2s linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10px)}
+100%{transform:translateY(500px) rotate(720deg);opacity:0}
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="wrap">
-  <div class="card" role="application" aria-label="Contador de cliques no coração">
-    <h1>Clique no coração</h1>
-    <div class="subtitle">Cada clique adiciona <strong>5%</strong>. Toque até 100%!</div>
+<div class="card">
 
-    <div class="heart-btn" id="heartBtn" role="button" aria-pressed="false" tabindex="0" aria-label="Coração, clique para aumentar a barra">
-      <svg id="heartSvg" class="heart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path id="heartPath" fill="#ff3b5c" d="M12 21s-7.5-4.873-10.5-8.25C-0.3 8.76 3.3 4 7.5 6.75 9.3 8 12 10.5 12 10.5s2.7-2.5 4.5-3.75C20.7 4 24.3 8.76 22.5 12.75 19.5 16.127 12 21 12 21z"/>
-      </svg>
-    </div>
+<h2>Clique no coração</h2>
 
-    <div class="progress-wrap" aria-hidden="false" aria-label="Barra de progresso">
-      <div id="progressInner" class="progress-inner" style="width:0%"></div>
-    </div>
-    <div id="percentText" class="percent" aria-live="polite">0%</div>
+<div class="heart" id="heart">❤️</div>
 
-    <!-- audio: atualize o nome do arquivo se você renomeou -->
-    <audio id="clickSound" src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3" preload="auto"></audio>
-  </div>
+<div class="bar">
+<div class="fill" id="fill"></div>
 </div>
 
-<!-- confetti container -->
-<div id="confettiRoot" class="confetti" aria-hidden="true"></div>
+<div id="percent">0%</div>
 
-<!-- final screen (video + texto) -->
-<div id="finalScreen" aria-hidden="true" role="dialog" aria-modal="true">
-  <video id="finalVideo" controls>
-    <source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4" type="video/mp4">
-    Seu navegador não suporta o vídeo.
-  </video>
+<audio id="sound" src="som.mp3"></audio>
 
-  <div id="finalText">
-    Texto de teste: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  </div>
 </div>
+
+
+<div id="final">
+
+<video controls autoplay>
+<source src="video.mp4" type="video/mp4">
+</video>
+
+<p>Texto de teste aqui embaixo do vídeo. Depois você pode trocar por qualquer coisa.</p>
+
+</div>
+
 
 <script>
-(function(){
-  const heartBtn = document.getElementById('heartBtn');
-  const heartSvg = document.getElementById('heartSvg');
-  const progressInner = document.getElementById('progressInner');
-  const percentText = document.getElementById('percentText');
-  const confettiRoot = document.getElementById('confettiRoot');
-  const finalScreen = document.getElementById('finalScreen');
-  const finalVideo = document.getElementById('finalVideo');
-  const audio = document.getElementById('clickSound');
 
-  let percent = 0;
-  const increment = 5;
+let percent=0
 
-  // Atualiza UI
-  function updateUI(){
-    progressInner.style.width = percent + '%';
-    percentText.textContent = (percent === 100 ? '100% — ❤ Completo!' : percent + '%');
-  }
+const heart=document.getElementById("heart")
+const fill=document.getElementById("fill")
+const text=document.getElementById("percent")
+const final=document.getElementById("final")
+const sound=document.getElementById("sound")
 
-  // Toca som com proteção de erros
-  function playSound(){
-    if(!audio) return;
-    try{
-      audio.currentTime = 0;
-      const p = audio.play();
-      if(p && p.catch) p.catch(()=>{/*play bloqueado*/});
-    }catch(e){
-      console.warn('Erro ao tentar reproduzir áudio:', e);
-    }
-  }
+function confetti(){
 
-  // Confetes (cria e remove automaticamente)
-  function createConfetti(){
-    const colors = ['#ff3b5c','#ffd166','#22c55e','#60a5fa','#a78bfa'];
-    const count = 40;
-    for(let i=0;i<count;i++){
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      const w = 8 + Math.random()*12;
-      el.style.width = w + 'px';
-      el.style.height = (10 + Math.random()*14) + 'px';
-      el.style.left = Math.random()*100 + 'vw';
-      el.style.top = (-20 - Math.random()*80) + 'px';
-      el.style.background = colors[Math.floor(Math.random()*colors.length)];
-      // small staggered duration/delay
-      const delay = Math.random()*200;
-      el.style.animationDelay = delay + 'ms';
-      el.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
-      confettiRoot.appendChild(el);
-      // remove after animation
-      setTimeout(()=> { try{ el.remove(); } catch(e){} }, 1600 + delay);
-    }
-  }
+for(let i=0;i<40;i++){
 
-  // Exibe a tela final (fade) e tenta tocar o vídeo
-  function showFinalScreen(){
-    finalScreen.classList.add('show');
-    finalScreen.setAttribute('aria-hidden','false');
-    // por segurança, faça scroll para topo e trave background se necessário
-    try{
-      // tentar reproduzir o vídeo (usuário já fez interação)
-      const p = finalVideo.play();
-      if(p && p.catch) p.catch(()=>{/* autoplay bloqueado, usuário pode tocar manualmente */});
-    }catch(e){
-      console.warn('Não foi possível iniciar o vídeo automaticamente:', e);
-    }
-  }
+let c=document.createElement("div")
+c.className="confetti"
 
-  // Função principal do clique
-  function onHeartClick(){
-    if (percent >= 100) return;
-    // protege para não ultrapassar 100
-    percent = Math.min(100, percent + increment);
-    updateUI();
+c.style.left=Math.random()*100+"vw"
 
-    // animação visual do SVG
-    heartSvg.classList.remove('pop');
-    void heartSvg.offsetWidth;
-    heartSvg.classList.add('pop');
+c.style.background=["red","yellow","blue","lime"][Math.floor(Math.random()*4)]
 
-    // vibração (se suportada)
-    if(navigator.vibrate) {
-      try { navigator.vibrate(50); } catch(e) { /* nada */ }
-    }
+document.body.appendChild(c)
 
-    // som
-    playSound();
+setTimeout(()=>c.remove(),1200)
 
-    // quando atingir 100%: confete + mostrar finalScreen com um pequeno delay
-    if (percent === 100) {
-      // pequena adição visual no coração
-      heartSvg.classList.add('full');
-      createConfetti();
-      setTimeout(showFinalScreen, 700);
-    }
-  }
+}
 
-  // Eventos
-  heartBtn.addEventListener('click', onHeartClick);
-  // acessibilidade: Enter/Space
-  heartBtn.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onHeartClick(); }
-  });
+}
 
-  // Inicializa
-  updateUI();
+heart.onclick=()=>{
 
-  // Log útil no console (se quiser depurar)
-  console.log('Script pronto — clique no coração para testar.');
+if(percent>=100)return
 
-})();
+percent+=5
+
+fill.style.width=percent+"%"
+
+text.innerText=percent+"%"
+
+sound.currentTime=0
+sound.play()
+
+if(navigator.vibrate){
+navigator.vibrate(50)
+}
+
+if(percent>=100){
+
+confetti()
+
+setTimeout(()=>{
+final.classList.add("show")
+},600)
+
+}
+
+}
+
 </script>
 
 </body>
