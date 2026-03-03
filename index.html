@@ -1,122 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>para regina</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coração</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
 body{
-background:black;
-color:white;
-overflow:hidden;
+margin:0;
 height:100vh;
 display:flex;
-align-items:center;
 justify-content:center;
-flex-direction:column;
+align-items:center;
+background:linear-gradient(180deg,#041124,#071025);
+font-family:Arial;
+color:white;
+overflow:hidden;
 }
 
-/* tela de loading */
+.card{
+width:340px;
+text-align:center;
+background:rgba(255,255,255,0.03);
+padding:25px;
+border-radius:14px;
+backdrop-filter:blur(10px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
 
-#loading{
-position:absolute;
-width:100%;
+.heart{
+font-size:85px;
+cursor:pointer;
+transition:.15s;
+user-select:none;
+}
+
+.heart:active{
+transform:scale(1.2);
+}
+
+.bar{
+height:16px;
+background:#1e293b;
+border-radius:10px;
+overflow:hidden;
+margin-top:20px;
+}
+
+.fill{
 height:100%;
-background:black;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
+width:0%;
+background:linear-gradient(90deg,#ff3b5c,#ff8a4d);
+transition:.3s;
 }
 
 #percent{
-font-size:50px;
-margin-bottom:30px;
+margin-top:10px;
+font-weight:bold;
 }
 
-#click{
-padding:15px 40px;
-font-size:20px;
-background:white;
-border:none;
-border-radius:10px;
-cursor:pointer;
+/* confete */
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+animation:fall 1.5s linear forwards;
 }
 
-/* coração */
-
-#heart{
-display:none;
-font-size:120px;
-cursor:pointer;
-animation:pulse 1.2s infinite;
-}
-
-@keyframes pulse{
-
-0%{transform:scale(1);}
-50%{transform:scale(1.2);}
-100%{transform:scale(1);}
-
+@keyframes fall{
+0%{transform:translateY(-20px)}
+100%{transform:translateY(600px) rotate(720deg);opacity:0}
 }
 
 /* tela final */
 
 #final{
-display:none;
-position:absolute;
-width:100%;
-height:100%;
-overflow:hidden;
-}
-
-#videoBg{
-position:absolute;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-1;
-filter:brightness(60%);
-}
-
-/* fundo blur bonito */
-
-.overlay{
-position:absolute;
-width:100%;
-height:100%;
-background:linear-gradient(
-to top,
-rgba(0,0,0,0.8),
-rgba(0,0,0,0.2)
-);
+position:fixed;
+inset:0;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-text-align:center;
+opacity:0;
+pointer-events:none;
+transition:1s;
 padding:20px;
+text-align:center;
+
+/* fundo bonito */
+
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.8)),
+url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
+
+background-size:cover;
+background-position:center;
 }
 
-.title{
-font-size:45px;
-margin-bottom:20px;
-font-weight:600;
+#final.show{
+opacity:1;
+pointer-events:auto;
 }
 
-.text{
-font-size:22px;
+video{
+width:90%;
 max-width:700px;
-line-height:1.5;
-opacity:0.9;
+border-radius:12px;
+box-shadow:0 20px 60px rgba(0,0,0,0.8);
+margin-bottom:25px;
+}
+
+/* texto estilizado */
+
+.finalText{
+font-size:28px;
+font-weight:600;
+max-width:700px;
+line-height:1.4;
+text-shadow:0 5px 20px rgba(0,0,0,0.8);
 }
 
 </style>
@@ -124,80 +127,100 @@ opacity:0.9;
 
 <body>
 
-<!-- loading -->
+<div class="card">
 
-<div id="loading">
+<h2>um site para regina apenas para ela ❤</h2>
+
+<div class="heart" id="heart">❤️</div>
+
+<div class="bar">
+<div class="fill" id="fill"></div>
+</div>
 
 <div id="percent">0%</div>
 
-<button id="click">clique</button>
+<audio id="sound">
+<source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3">
+</audio>
 
 </div>
 
-<!-- coração -->
-
-<div id="heart">❤</div>
-
-<!-- tela final -->
 
 <div id="final">
 
-<video id="videoBg" autoplay muted loop playsinline>
-<source src="video.mp4" type="video/mp4">
+<video id="video" autoplay playsinline controls>
+<source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4">
 </video>
 
-<div class="overlay">
-
-<div class="title">
-um site para regina apenas para ela ❤
-</div>
-
-<div class="text">
-se você está vendo isso, é porque alguém fez algo simples,
-mas pensado especialmente para você.
+<div class="finalText">
+Se você chegou até aqui, é porque alguém queria fazer algo simples…  
+mas feito especialmente para você ❤
 </div>
 
 </div>
 
-<audio id="music" src="audio.mp3"></audio>
-
-</div>
 
 <script>
 
-let percent = 0
+let percent=0
 
-const btn = document.getElementById("click")
-const text = document.getElementById("percent")
-const heart = document.getElementById("heart")
+const heart=document.getElementById("heart")
+const fill=document.getElementById("fill")
+const text=document.getElementById("percent")
+const final=document.getElementById("final")
+const sound=document.getElementById("sound")
+const video=document.getElementById("video")
 
-btn.onclick = () =>{
+function confetti(){
 
-percent += 5
+for(let i=0;i<50;i++){
 
-if(percent > 100) percent = 100
+let c=document.createElement("div")
 
-text.innerText = percent + "%"
+c.className="confetti"
 
-if(percent == 100){
+c.style.left=Math.random()*100+"vw"
 
-document.getElementById("loading").style.display="none"
+c.style.background=["#ff3b5c","#ffd166","#22c55e","#60a5fa"][Math.floor(Math.random()*4)]
 
-heart.style.display="block"
+document.body.appendChild(c)
+
+setTimeout(()=>c.remove(),1500)
 
 }
 
 }
 
-heart.onclick = () =>{
+heart.onclick=()=>{
 
-heart.style.display="none"
+if(percent>=100)return
 
-document.getElementById("final").style.display="block"
+percent=Math.min(100,percent+5)
 
-const music = document.getElementById("music")
+fill.style.width=percent+"%"
 
-music.play()
+text.innerText=percent+"%"
+
+sound.currentTime=0
+sound.play()
+
+if(navigator.vibrate){
+navigator.vibrate(50)
+}
+
+if(percent===100){
+
+confetti()
+
+setTimeout(()=>{
+
+final.classList.add("show")
+
+video.play()
+
+},700)
+
+}
 
 }
 
