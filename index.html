@@ -1,106 +1,122 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coração</title>
+<title>para regina</title>
 
 <style>
 
-body{
+*{
 margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(180deg,#041124,#071025);
-font-family:Arial;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:black;
 color:white;
 overflow:hidden;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 }
 
-.card{
-width:340px;
-text-align:center;
-background:rgba(255,255,255,0.03);
-padding:25px;
-border-radius:14px;
-backdrop-filter:blur(10px);
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
+/* tela de loading */
 
-.heart{
-font-size:85px;
-cursor:pointer;
-transition:.15s;
-user-select:none;
-}
-
-.heart:active{
-transform:scale(1.2);
-}
-
-.bar{
-height:16px;
-background:#1e293b;
-border-radius:10px;
-overflow:hidden;
-margin-top:20px;
-}
-
-.fill{
+#loading{
+position:absolute;
+width:100%;
 height:100%;
-width:0%;
-background:linear-gradient(90deg,#ff3b5c,#ff8a4d);
-transition:.3s;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 }
 
 #percent{
-margin-top:10px;
-font-weight:bold;
+font-size:50px;
+margin-bottom:30px;
 }
 
-/* confete */
-
-.confetti{
-position:fixed;
-width:10px;
-height:10px;
-animation:fall 1.5s linear forwards;
+#click{
+padding:15px 40px;
+font-size:20px;
+background:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
 }
 
-@keyframes fall{
-0%{transform:translateY(-20px)}
-100%{transform:translateY(600px) rotate(720deg);opacity:0}
+/* coração */
+
+#heart{
+display:none;
+font-size:120px;
+cursor:pointer;
+animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+
 }
 
 /* tela final */
 
 #final{
-position:fixed;
-inset:0;
-background:black;
+display:none;
+position:absolute;
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+#videoBg{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-1;
+filter:brightness(60%);
+}
+
+/* fundo blur bonito */
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(
+to top,
+rgba(0,0,0,0.8),
+rgba(0,0,0,0.2)
+);
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-opacity:0;
-pointer-events:none;
-transition:1s;
+text-align:center;
 padding:20px;
 }
 
-#final.show{
-opacity:1;
-pointer-events:auto;
+.title{
+font-size:45px;
+margin-bottom:20px;
+font-weight:600;
 }
 
-video{
-width:90%;
+.text{
+font-size:22px;
 max-width:700px;
-border-radius:12px;
-box-shadow:0 20px 60px rgba(0,0,0,0.8);
-margin-bottom:20px;
+line-height:1.5;
+opacity:0.9;
 }
 
 </style>
@@ -108,98 +124,80 @@ margin-bottom:20px;
 
 <body>
 
-<div class="card">
+<!-- loading -->
 
-<h2>Clique no coração</h2>
-<p>cada clique +5%</p>
-
-<div class="heart" id="heart">❤️</div>
-
-<div class="bar">
-<div class="fill" id="fill"></div>
-</div>
+<div id="loading">
 
 <div id="percent">0%</div>
 
-<audio id="sound">
-<source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3">
-</audio>
+<button id="click">clique</button>
 
 </div>
 
+<!-- coração -->
+
+<div id="heart">❤</div>
+
+<!-- tela final -->
 
 <div id="final">
 
-<video id="video" autoplay playsinline controls>
-<source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4">
+<video id="videoBg" autoplay muted loop playsinline>
+<source src="video.mp4" type="video/mp4">
 </video>
 
-<p>Texto de teste aqui. Depois a gente pode colocar algo melhor.</p>
+<div class="overlay">
+
+<div class="title">
+um site para regina apenas para ela ❤
+</div>
+
+<div class="text">
+se você está vendo isso, é porque alguém fez algo simples,
+mas pensado especialmente para você.
+</div>
 
 </div>
 
+<audio id="music" src="audio.mp3"></audio>
+
+</div>
 
 <script>
 
-let percent=0
+let percent = 0
 
-const heart=document.getElementById("heart")
-const fill=document.getElementById("fill")
-const text=document.getElementById("percent")
-const final=document.getElementById("final")
-const sound=document.getElementById("sound")
-const video=document.getElementById("video")
+const btn = document.getElementById("click")
+const text = document.getElementById("percent")
+const heart = document.getElementById("heart")
 
-function confetti(){
+btn.onclick = () =>{
 
-for(let i=0;i<50;i++){
+percent += 5
 
-let c=document.createElement("div")
+if(percent > 100) percent = 100
 
-c.className="confetti"
+text.innerText = percent + "%"
 
-c.style.left=Math.random()*100+"vw"
+if(percent == 100){
 
-c.style.background=["#ff3b5c","#ffd166","#22c55e","#60a5fa"][Math.floor(Math.random()*4)]
+document.getElementById("loading").style.display="none"
 
-document.body.appendChild(c)
-
-setTimeout(()=>c.remove(),1500)
+heart.style.display="block"
 
 }
 
 }
 
-heart.onclick=()=>{
+heart.onclick = () =>{
 
-if(percent>=100)return
+heart.style.display="none"
 
-percent=Math.min(100,percent+5)
+document.getElementById("final").style.display="block"
 
-fill.style.width=percent+"%"
+const music = document.getElementById("music")
 
-text.innerText=percent+"%"
-
-sound.currentTime=0
-sound.play()
-
-if(navigator.vibrate){
-navigator.vibrate(50)
-}
-
-if(percent===100){
-
-confetti()
-
-setTimeout(()=>{
-
-final.classList.add("show")
-
-video.play()
-
-},700)
-
-}
+music.play()
 
 }
 
