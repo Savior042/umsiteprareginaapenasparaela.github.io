@@ -13,21 +13,27 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#071025;
-color:white;
+background:linear-gradient(180deg,#041124,#071025);
 font-family:Arial;
+color:white;
+overflow:hidden;
 }
 
 .card{
+width:340px;
 text-align:center;
-width:320px;
+background:rgba(255,255,255,0.03);
+padding:25px;
+border-radius:14px;
+backdrop-filter:blur(10px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 .heart{
-font-size:80px;
+font-size:85px;
 cursor:pointer;
+transition:.15s;
 user-select:none;
-transition:transform .15s;
 }
 
 .heart:active{
@@ -54,6 +60,20 @@ margin-top:10px;
 font-weight:bold;
 }
 
+/* confete */
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+animation:fall 1.5s linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-20px)}
+100%{transform:translateY(600px) rotate(720deg);opacity:0}
+}
+
 /* tela final */
 
 #final{
@@ -67,6 +87,7 @@ justify-content:center;
 opacity:0;
 pointer-events:none;
 transition:1s;
+padding:20px;
 }
 
 #final.show{
@@ -76,22 +97,10 @@ pointer-events:auto;
 
 video{
 width:90%;
-max-width:500px;
+max-width:700px;
+border-radius:12px;
+box-shadow:0 20px 60px rgba(0,0,0,0.8);
 margin-bottom:20px;
-border-radius:10px;
-}
-
-.confetti{
-position:fixed;
-width:8px;
-height:8px;
-background:red;
-animation:fall 1.2s linear forwards;
-}
-
-@keyframes fall{
-0%{transform:translateY(-10px)}
-100%{transform:translateY(500px) rotate(720deg);opacity:0}
 }
 
 </style>
@@ -102,6 +111,7 @@ animation:fall 1.2s linear forwards;
 <div class="card">
 
 <h2>Clique no coração</h2>
+<p>cada clique +5%</p>
 
 <div class="heart" id="heart">❤️</div>
 
@@ -111,18 +121,20 @@ animation:fall 1.2s linear forwards;
 
 <div id="percent">0%</div>
 
-<audio id="sound" src="som.mp3"></audio>
+<audio id="sound">
+<source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3">
+</audio>
 
 </div>
 
 
 <div id="final">
 
-<video controls autoplay>
-<source src="video.mp4" type="video/mp4">
+<video id="video" autoplay playsinline controls>
+<source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4">
 </video>
 
-<p>Texto de teste aqui embaixo do vídeo. Depois você pode trocar por qualquer coisa.</p>
+<p>Texto de teste aqui. Depois a gente pode colocar algo melhor.</p>
 
 </div>
 
@@ -136,21 +148,23 @@ const fill=document.getElementById("fill")
 const text=document.getElementById("percent")
 const final=document.getElementById("final")
 const sound=document.getElementById("sound")
+const video=document.getElementById("video")
 
 function confetti(){
 
-for(let i=0;i<40;i++){
+for(let i=0;i<50;i++){
 
 let c=document.createElement("div")
+
 c.className="confetti"
 
 c.style.left=Math.random()*100+"vw"
 
-c.style.background=["red","yellow","blue","lime"][Math.floor(Math.random()*4)]
+c.style.background=["#ff3b5c","#ffd166","#22c55e","#60a5fa"][Math.floor(Math.random()*4)]
 
 document.body.appendChild(c)
 
-setTimeout(()=>c.remove(),1200)
+setTimeout(()=>c.remove(),1500)
 
 }
 
@@ -160,7 +174,7 @@ heart.onclick=()=>{
 
 if(percent>=100)return
 
-percent+=5
+percent=Math.min(100,percent+5)
 
 fill.style.width=percent+"%"
 
@@ -173,13 +187,17 @@ if(navigator.vibrate){
 navigator.vibrate(50)
 }
 
-if(percent>=100){
+if(percent===100){
 
 confetti()
 
 setTimeout(()=>{
+
 final.classList.add("show")
-},600)
+
+video.play()
+
+},700)
 
 }
 
