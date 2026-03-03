@@ -1,132 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coração — Clique até 100%</title>
+  <style>
+    :root{--bg:#111827;--card:#0b1220;--accent:#ef4444;--bar-bg:#263244}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#07102a 0%, #071823 100%);color:#e6eef8}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:360px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:16px;padding:28px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 24px rgba(2,6,23,0.6);text-align:center}
+    h1{font-size:20px;margin:0 0 12px}
+    .subtitle{font-size:13px;color:rgba(230,238,248,0.7);margin-bottom:18px}
 
-<title>teste do susaki</title>
+    /* Heart button */
+    .heart-btn{width:120px;height:120px;margin:0 auto;display:inline-grid;place-items:center;cursor:pointer;user-select:none}
+    svg.heart{width:100%;height:100%;transition:transform 160ms cubic-bezier(.2,.9,.3,1);filter:drop-shadow(0 6px 18px rgba(239,68,68,0.18))}
+    .heart.pop{transform:scale(1.12)}
+    .heart.full{filter:drop-shadow(0 12px 28px rgba(239,68,68,0.32));}
 
-<style>
+    /* Progress bar */
+    .progress-wrap{margin-top:20px;background:var(--bar-bg);height:18px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .progress-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#f97316);transition:width 300ms ease}
+    .percent{margin-top:10px;font-weight:600}
 
-body{
-margin:0;
-font-family:Arial;
-background:black;
-color:white;
-overflow:hidden;
-}
+    .note{font-size:12px;color:rgba(230,238,248,0.6);margin-top:8px}
 
-/* VIDEO */
+    /* Small celebrate animation when reaches 100% */
+    .confetti{position:absolute;pointer-events:none;left:0;right:0;top:12px}
 
-#video{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-1;
-display:none;
-}
-
-/* BLUR */
-
-#blur{
-position:fixed;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(25px);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:40px;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* CONTEUDO */
-
-#content{
-display:none;
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-}
-
-h1{
-font-size:60px;
-margin-bottom:40px;
-}
-
-.icons{
-display:flex;
-gap:60px;
-justify-content:center;
-}
-
-.icon img{
-width:100px;
-cursor:pointer;
-transition:0.3s;
-}
-
-.icon img:hover{
-transform:scale(1.2);
-}
-
-</style>
+    @keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-160px);opacity:0}}
+    .burst{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0;animation:floatUp 1.2s linear forwards}
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Coração interativo">
+      <h1>Coração — clique até 100%</h1>
+      <div class="subtitle">Cada clique dá +5% — toque no coração e ouça o som!</div>
 
-<video id="video" loop playsinline>
-<source src="video.mp4" type="video/mp4">
-</video>
+      <div style="position:relative">
+        <div class="heart-btn" id="heartBtn" title="Clique no coração">
+          <!-- SVG coração -->
+          <svg id="heartSvg" class="heart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 21s-7.5-4.873-10.5-8.25C-0.3 8.76 3.3 4 7.5 6.75 9.3 8 12 10.5 12 10.5s2.7-2.5 4.5-3.75C20.7 4 24.3 8.76 22.5 12.75 19.5 16.127 12 21 12 21z" fill="#ef4444"/>
+          </svg>
+        </div>
 
-<div id="blur">
-Toque para continuar
-</div>
+        <div class="confetti" id="confetti"></div>
+      </div>
 
-<div id="content">
+      <div class="progress-wrap" aria-hidden="false">
+        <div class="progress-inner" id="progressInner"></div>
+      </div>
+      <div class="percent" id="percentText">0%</div>
+      <div class="note">Clique no coração até a barra chegar a 100%.</div>
 
-<h1>teste do susaki</h1>
+      <!-- Áudio: coloque o arquivo mp3 no mesmo diretório do HTML ou atualize o atributo src -->
+      <audio id="clickSound" src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3" preload="auto"></audio>
+    </div>
+  </div>
 
-<div class="icons">
+  <script>
+    (function(){
+      const audio = document.getElementById('clickSound');
+      const heartBtn = document.getElementById('heartBtn');
+      const heartSvg = document.getElementById('heartSvg');
+      const progressInner = document.getElementById('progressInner');
+      const percentText = document.getElementById('percentText');
+      const confettiRoot = document.getElementById('confetti');
 
-<div class="icon" onclick="window.open('https://www.roblox.com')">
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.svg">
-</div>
+      let percent = 0;
+      const increment = 5; // cada clique
 
-<div class="icon" onclick="window.open('https://www.youtube.com')">
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
-</div>
+      function playSound(){
+        try{
+          audio.currentTime = 0;
+          const p = audio.play();
+          if(p && p.catch) p.catch(()=>{/* autoplay prevented on some browsers until user gesture — but clicks are gestures */});
+        }catch(e){console.log('erro ao tocar som',e)}
+      }
 
-</div>
+      function updateUI(){
+        progressInner.style.width = percent + '%';
+        percentText.textContent = percent + '%';
+      }
 
-</div>
+      function makeConfetti(){
+        // cria alguns quadradinhos que sobem e somem
+        for(let i=0;i<14;i++){
+          const el = document.createElement('div');
+          el.className = 'burst';
+          el.style.left = (20 + Math.random()*60) + '%';
+          el.style.background = ['#ff77a9','#ffd166','#f97316','#60a5fa','#34d399'][Math.floor(Math.random()*5)];
+          el.style.width = el.style.height = (6 + Math.random()*8) + 'px';
+          el.style.borderRadius = (Math.random()*4)+'px';
+          el.style.transform = 'translateY(0) rotate('+Math.floor(Math.random()*360)+'deg)';
+          confettiRoot.appendChild(el);
+          setTimeout(()=>el.remove(), 1400 + Math.random()*600);
+        }
+      }
 
-<script>
+      heartBtn.addEventListener('click', ()=>{
+        if(percent >= 100) return;
+        percent = Math.min(100, percent + increment);
+        updateUI();
+        playSound();
 
-const video = document.getElementById("video")
-const blur = document.getElementById("blur")
-const content = document.getElementById("content")
+        // anima coração
+        heartSvg.classList.remove('pop');
+        void heartSvg.offsetWidth;
+        heartSvg.classList.add('pop');
 
-blur.onclick = function(){
+        if(percent === 100){
+          heartSvg.classList.add('full');
+          percentText.textContent = '100% — ❤ Completo!';
+          makeConfetti();
+        }
+      });
 
-blur.style.display="none"
+      // acessibilidade: tecla Enter/Space também clica
+      heartBtn.tabIndex = 0;
+      heartBtn.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); heartBtn.click(); }
+      });
 
-video.style.display="block"
-
-video.play()
-
-content.style.display="block"
-
-}
-
-</script>
-
+      // inicial
+      updateUI();
+    })();
+  </script>
 </body>
 </html>
