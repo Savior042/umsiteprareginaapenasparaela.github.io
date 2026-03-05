@@ -2,140 +2,91 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Coração</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>...</title>
 
 <style>
 
 body{
 margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(180deg,#041124,#071025);
-font-family:Arial;
+font-family:Arial, Helvetica, sans-serif;
 color:white;
-overflow:hidden;
--webkit-tap-highlight-color: transparent;
+text-align:center;
+overflow-x:hidden;
+background:black;
 }
 
-.card{
-width:90%;
-max-width:360px;
-text-align:center;
-background:rgba(255,255,255,0.03);
-padding:28px;
-border-radius:16px;
-backdrop-filter:blur(10px);
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
+/* VIDEO DE FUNDO */
+
+.video-bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
 }
+
+/* camada escura para estética */
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+z-index:-1;
+}
+
+/* CONTEÚDO */
+
+.container{
+padding:40px 20px;
+max-width:700px;
+margin:auto;
+}
+
+/* TEXTO */
 
 h2{
-margin-bottom:5px;
+font-size:22px;
+margin-top:40px;
 }
 
-.sub{
-font-size:12px;
-opacity:0.7;
-margin-bottom:15px;
+p{
+font-size:20px;
+margin-top:25px;
 }
 
-.heart{
-font-size:90px;
-cursor:pointer;
-transition:.15s;
-user-select:none;
-display:inline-block;
-padding:10px;
+/* IMAGENS */
+
+.tomate{
+width:90%;
+max-width:420px;
+margin:18px auto;
+display:block;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.6);
+transition:transform 0.2s;
 }
 
-.heart:active{
-transform:scale(1.25);
+.tomate:active{
+transform:scale(0.95);
 }
 
-.bar{
-height:16px;
-background:#1e293b;
+/* BOTÃO SOM */
+
+.sound-button{
+margin-top:35px;
+padding:14px 22px;
+font-size:16px;
+border:none;
 border-radius:10px;
-overflow:hidden;
-margin-top:20px;
-}
-
-.fill{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#ff3b5c,#ff8a4d);
-transition:.3s;
-}
-
-#percent{
-margin-top:10px;
-font-weight:bold;
-}
-
-/* confete */
-
-.confetti{
-position:fixed;
-width:10px;
-height:10px;
-animation:fall 1.5s linear forwards;
-}
-
-@keyframes fall{
-0%{transform:translateY(-20px)}
-100%{transform:translateY(600px) rotate(720deg);opacity:0}
-}
-
-/* tela final */
-
-#final{
-position:fixed;
-inset:0;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-opacity:0;
-pointer-events:none;
-transition:1s;
-padding:20px;
-text-align:center;
-
-background:
-linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.85)),
-url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
-
-background-size:cover;
-background-position:center;
-overflow:auto;
-}
-
-#final.show{
-opacity:1;
-pointer-events:auto;
-}
-
-video{
-width:95%;
-max-width:700px;
-border-radius:14px;
-box-shadow:0 20px 60px rgba(0,0,0,0.8);
-margin-bottom:25px;
-}
-
-.finalText{
-font-size:18px;
-max-width:700px;
-line-height:1.6;
-text-shadow:0 5px 20px rgba(0,0,0,0.8);
-}
-
-.finalText img{
-width:100%;
-border-radius:12px;
-margin-top:15px;
+background:white;
+color:black;
+cursor:pointer;
 }
 
 </style>
@@ -143,140 +94,36 @@ margin-top:15px;
 
 <body>
 
-<div class="card">
-
-<h2>um site para regina apenas para ela ❤</h2>
-<div class="sub">clica no meu coracaozinho</div>
-
-<div class="heart" id="heart">❤️</div>
-
-<div class="bar">
-<div class="fill" id="fill"></div>
-</div>
-
-<div id="percent">0%</div>
-
-<audio id="sound">
-<source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3">
-</audio>
-
-</div>
-
-
-<div id="final">
-
-<video id="video" autoplay playsinline controls>
-<source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4">
+<video autoplay muted loop playsinline class="video-bg">
+<source src="YTDwn.com_YouTube_Benson-Boone-Beautiful.mp4" type="video/mp4">
 </video>
 
-<div class="finalText">
+<div class="overlay"></div>
 
-<p>
-OWAIDWADIAODWAIOI MWUBEM, CWMO VC TA??<br><br>
+<div class="container">
 
-eu criei esse site bem tuff para me abrir o máximo possível com vc okok (mtmt aura<br><br>
+<h2>eu ouvi que vse ama tomates?</h2>
 
-hoje completou 2 meses que eu me sinto taoatoaotaoao feliz ao seu lado,
-(coisa que passou MTMTMTMT RAPIDO NWOSSA).<br><br>
+<img src="image1.png" class="tomate">
 
-de qualquer forma, isso foi uma coisa que aconteceu mtmtmttmt do nada,
-e sempre tinha me deixado pensativo no começo de
-"qual a chance disso acontecer comigo?" rsrsrsrsrs.<br><br>
+<img src="image2.png" class="tomate">
 
-pensamento esse que só vai se intensificando por o qual perfeita
-você é na minha visão (eota).<br><br>
+<p>rsrsrsrsrsr gwstou dos meus tomates mwu benzinho??</p>
 
-enfim, saiba que eu sou MUITO grato e feliz por ter vse okokowkok.
-WUTEAMOMUITO, E CLWRAMENTE MWAIS DOQ VC OKOK
-RSRSRSRSRWRAWRS.<br><br>
+<img src="image3.png" class="tomate">
 
-e wspero que vse me aguente veio e barrigudo tambem rsrsrrsrssrsr
-</p>
-
-<br><br>
-
-<p>eu ouvi que vse ama tomates?</p>
-
-<img src="https://media.discordapp.net/attachments/1464970950645907629/1479239408522625215/content.png?format=webp&quality=lossless">
-
-<img src="https://media.discordapp.net/attachments/1464970950645907629/1479240937418002493/content.png?format=webp&quality=lossless">
-
-<br><br>
-
-<p>rsrssrsrsrsr gwstou dos meus tomates mwu benzinho??</p>
-
-<img src="https://media.discordapp.net/attachments/1464970950645907629/1479246576906928280/image.png?format=webp&quality=lossless">
+<button class="sound-button" onclick="tocarSom()">ativar som</button>
 
 </div>
 
-</div>
-
+<audio id="audio">
+<source src="YTDwn.com_Shorts_pinto-de-cachorro-assado.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
-let percent=0
-
-const heart=document.getElementById("heart")
-const fill=document.getElementById("fill")
-const text=document.getElementById("percent")
-const final=document.getElementById("final")
-const sound=document.getElementById("sound")
-const video=document.getElementById("video")
-
-function confetti(){
-
-for(let i=0;i<50;i++){
-
-let c=document.createElement("div")
-
-c.className="confetti"
-
-c.style.left=Math.random()*100+"vw"
-
-c.style.background=["#ff3b5c","#ffd166","#22c55e","#60a5fa"][Math.floor(Math.random()*4)]
-
-document.body.appendChild(c)
-
-setTimeout(()=>c.remove(),1500)
-
-}
-
-}
-
-heart.onclick=()=>{
-
-if(percent>=100)return
-
-percent=Math.min(100,percent+5)
-
-fill.style.width=percent+"%"
-
-text.innerText=percent+"%"
-
-sound.currentTime=0
-sound.play()
-
-if(navigator.vibrate){
-navigator.vibrate([30])
-}
-
-heart.style.transform="scale(1.3)"
-setTimeout(()=>heart.style.transform="scale(1)",120)
-
-if(percent===100){
-
-confetti()
-
-setTimeout(()=>{
-
-final.classList.add("show")
-
-video.play()
-
-},700)
-
-}
-
+function tocarSom(){
+document.getElementById("audio").play();
 }
 
 </script>
