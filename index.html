@@ -5,35 +5,71 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
 <title>um site para regina apenas para ela ❤</title>
 <style>
-  :root{--bg1:#041124;--bg2:#071025}
-  *{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff}
-  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-  .card{width:100%;max-width:380px;background:rgba(255,255,255,0.03);padding:22px;border-radius:14px;backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(0,0,0,.45);text-align:center}
-  h2{font-size:18px;margin:0 0 6px}
-  .sub{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:12px}
-  .heart{font-size:84px;cursor:pointer;display:inline-block;user-select:none;transition:transform .12s}
-  .heart:active{transform:scale(1.2)}
-  .bar{height:14px;background:#16202b;border-radius:10px;overflow:hidden;margin-top:18px}
-  .fill{height:100%;width:0%;background:linear-gradient(90deg,#ff3b5c,#ff8a4d);transition:width .28s}
-  #percent{margin-top:10px;font-weight:700}
+  :root{
+    --bg1:#041124;
+    --bg2:#071025;
+    --card-bg: rgba(255,255,255,0.03);
+    --accent1: #ff3b5c;
+    --accent2: #ff8a4d;
+  }
+
+  *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, Helvetica}
+
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#fff;-webkit-font-smoothing:antialiased}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+  .card{width:100%;max-width:380px;background:var(--card-bg);padding:20px 20px 28px;border-radius:14px;backdrop-filter:blur(8px);box-shadow:0 12px 36px rgba(0,0,0,.5);text-align:center}
+  h1{font-size:18px;margin:0 0 6px;font-weight:700}
+  .sub{font-size:13px;color:rgba(255,255,255,.82);margin-bottom:12px}
+
+  /* HEART */
+  .heart{font-size:86px;line-height:1;cursor:pointer;display:inline-block;user-select:none;transition:transform .12s ease}
+  .heart:active{transform:scale(1.18)}
+  .bar{height:14px;background:#14202a;border-radius:10px;overflow:hidden;margin-top:18px}
+  .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2));transition:width .28s ease}
+  #percent{margin-top:10px;font-weight:700;font-size:15px}
+
   /* confetti */
   .confetti{position:fixed;width:10px;height:10px;animation:confettiMove 1.2s linear forwards}
-  @keyframes confettiMove {0%{transform:translateY(-10px)}100%{transform:translateY(520px) rotate(720deg);opacity:0}}
-  /* final screen */
-  #final{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 16px;opacity:0;pointer-events:none;transition:opacity .8s;overflow:auto;
-    background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.7)), url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
-    background-size:cover;background-position:center}
+  @keyframes confettiMove{0%{transform:translateY(-10px)}100%{transform:translateY(520px) rotate(720deg);opacity:0}}
+
+  /* FINAL (aparece quando completar 100%) */
+  #final{
+    position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:28px 18px;opacity:0;pointer-events:none;transition:opacity .75s ease;overflow:auto;
+    background:
+      linear-gradient(rgba(0,0,0,.56),rgba(0,0,0,.78)),
+      url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
+    background-size:cover;background-position:center;
+  }
   #final.show{opacity:1;pointer-events:auto}
-  video{width:100%;max-width:900px;border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.6);margin-bottom:18px}
-  .finalText{width:100%;max-width:900px;color:#fff;font-size:16px;line-height:1.5;text-align:left}
-  .finalText img{width:100%;max-width:900px;border-radius:12px;margin:14px 0;display:block}
-  /* responsive tweaks */
-  @media(max-width:420px){
+
+  /* vídeo */
+  #video{width:100%;max-width:940px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.7);margin-bottom:18px}
+
+  /* texto grande e legível */
+  .finalText{
+    width:100%;max-width:920px;color:#fff;font-size:18px;line-height:1.6;text-align:left;padding:12px 6px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));
+    border-radius:10px;
+  }
+  /* garantir que imagens fiquem 100% e responsivas */
+  .finalText img{
+    display:block;
+    width:100%;
+    max-width:100%;
+    border-radius:12px;
+    margin:14px 0;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+
+  /* pequenos ajustes mobile */
+  @media (max-width:420px){
     .card{padding:18px;border-radius:12px}
-    .heart{font-size:76px}
-    h2{font-size:16px}
-    .finalText{font-size:15px}
+    .heart{font-size:80px}
+    h1{font-size:17px}
+    #percent{font-size:14px}
+    .finalText{font-size:16px;padding:10px}
+    #video{max-width:720px}
   }
 </style>
 </head>
@@ -41,38 +77,50 @@
 
 <div class="wrap">
   <div class="card" id="card">
-    <h2>um site para regina apenas para ela ❤</h2>
+    <h1>um site para regina apenas para ela ❤</h1>
     <div class="sub">clica no meu coracaozinho</div>
 
-    <div class="heart" id="heart" role="button" aria-pressed="false">❤️</div>
+    <div class="heart" id="heart" role="button" aria-label="Coração">❤️</div>
 
-    <div class="bar" aria-hidden="false" style="margin-top:18px">
+    <div class="bar" aria-hidden="false">
       <div class="fill" id="fill"></div>
     </div>
 
     <div id="percent">0%</div>
 
-    <!-- áudio do clique (nome EXATO do arquivo no repo) -->
+    <!-- áudio: mantenha o nome EXATO do arquivo no repositório -->
     <audio id="sound" preload="auto">
       <source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3" type="audio/mpeg">
     </audio>
   </div>
 </div>
 
-<!-- tela final: aparece quando o contador chega a 100% -->
+<!-- Tela final (invisível até 100%) -->
 <div id="final" aria-hidden="true">
   <video id="video" controls playsinline>
     <source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
   </video>
 
+  <!-- texto -> coloquei o seu conteúdo com quebras; imagens usadas pelos nomes que você falou (imagem1..3) -->
   <div class="finalText" id="finalText">
     <p>OWAIDWADIAODWAIOI MWUBEM, CWMO VC TA??</p>
 
-    <p>eu criei esse site bem tuff para me abrir o máximo possível com vc okok (mtmt aura ...</p>
+    <p>eu criei esse site bem tuff para me abrir o máximo possível com vc okok (mtmt aura</p>
 
-    <p>eu ouvi que vse ama tomates?</p>
+    <p>hoje completou 2 meses que eu me sinto taoatoaotaoao feliz ao seu lado, (coisa que passou MTMTMTMT RAPIDO NWOSSA</p>
 
-    <!-- AQUI: srcs apontam para os arquivos que você fez upload com esses nomes -->
+    <p>de qualquer forma, isso foi uma coisa que aconteceu mtmtmttmt do nada, e sempre tinha me deixado pensativo no começo de "qual a chance disso acontecer comigo?" rsrsrsrsrs</p>
+
+    <p>pensamento esse que só vai se intensificando por o qual perfeita você é na minha visão (eota</p>
+
+    <p>enfim, saiba que eu sou MUITO grato e feliz por ter vse okokowkok? WUTEAMOMUITO, E CLWRAMENTE MWAIS DOQ VC OKOK RSRSRSRSRWRAWRS</p>
+
+    <p>e wspero que vse me aguente veio e barrigudo tambem rsrsrrsrssrsr</p>
+
+    <p><strong>eu ouvi que vse ama tomates?</strong></p>
+
+    <!-- imagens locais (use exatamente esses nomes no repo) -->
     <img src="imagem1.png" alt="imagem 1">
     <img src="imagem2.png" alt="imagem 2">
 
@@ -83,13 +131,14 @@
 </div>
 
 <script>
-  // comportamento do clique/contagem/efeitos
+  // Lógica do contador / som / vibração / mostrar final
   let percent = 0;
   const heart = document.getElementById('heart');
   const fill = document.getElementById('fill');
   const percentText = document.getElementById('percent');
   const final = document.getElementById('final');
   const sound = document.getElementById('sound');
+  const video = document.getElementById('video');
 
   function createConfetti(){
     const colors = ['#ff3b5c','#ffd166','#22c55e','#60a5fa'];
@@ -97,47 +146,47 @@
       const el = document.createElement('div');
       el.className = 'confetti';
       el.style.left = Math.random()*100 + 'vw';
-      el.style.background = colors[Math.floor(Math.random()*colors.length)];
       el.style.width = (6 + Math.random()*10) + 'px';
       el.style.height = (8 + Math.random()*12) + 'px';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
       el.style.animationDelay = (Math.random()*200) + 'ms';
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),1400 + Math.random()*600);
+      setTimeout(()=>el.remove(), 1500 + Math.random()*600);
     }
   }
 
-  heart.addEventListener('click', ()=>{
-    if(percent >= 100) return;
+  heart.addEventListener('click', () => {
+    if (percent >= 100) return;
     percent = Math.min(100, percent + 5);
     fill.style.width = percent + '%';
     percentText.textContent = percent + '%';
 
-    // som (protege erros)
-    try{ sound.currentTime = 0; sound.play().catch(()=>{}); } catch(e){}
+    // tocar som (proteção contra erros)
+    try{ sound.currentTime = 0; sound.play().catch(()=>{}); }catch(e){}
 
-    // vibração
-    if(navigator.vibrate) try{ navigator.vibrate(30); } catch(e){}
+    // vibração curta (melhor em mobile)
+    if (navigator.vibrate) try{ navigator.vibrate(30); }catch(e){}
 
-    // micro-ani
+    // micro animação
     heart.style.transform = 'scale(1.25)';
-    setTimeout(()=> heart.style.transform = '', 110);
+    setTimeout(()=> heart.style.transform = '', 120);
 
-    if(percent === 100){
+    // quando 100%: confete + mostrar tela final
+    if (percent === 100){
       createConfetti();
       setTimeout(()=>{
         final.classList.add('show');
         final.setAttribute('aria-hidden','false');
-        // tenta tocar o vídeo (usuário já interagiu)
-        const v = document.getElementById('video');
-        try{ v.play().catch(()=>{}); }catch(e){}
+        // tentar tocar o vídeo (o usuário já interagiu)
+        try{ video.play().catch(()=>{}); }catch(e){}
       }, 600);
     }
   });
 
-  // --- debugging helpers (remova se quiser) ---
-  // Função para checar se arquivo existe via abrir link raw no GitHub. Substitua USER e REPO abaixo se quiser testar direto aqui.
-  // Ex: https://raw.githubusercontent.com/Savior042/umsitepragreginaapenasparaela.github.io/main/imagem1.png
+  // tecla Enter / Espaço para acessibilidade
+  heart.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); heart.click(); }
+  });
 </script>
-
 </body>
 </html>
