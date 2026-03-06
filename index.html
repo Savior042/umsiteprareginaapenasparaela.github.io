@@ -3,100 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>João & Regina</title>
+<title>Coração</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
-
 body{
-background:black;
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(180deg,#041124,#071025);
+font-family:Arial;
 color:white;
-overflow-x:hidden;
-}
-
-/* VIDEO FUNDO */
-
-.video-bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
 overflow:hidden;
+-webkit-tap-highlight-color: transparent;
 }
 
-.video-bg video{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-/* CONTAINER PRINCIPAL */
-
-.container{
-max-width:900px;
-margin:auto;
-padding:30px 20px;
-margin-top:40px;
-
-background:rgba(0,0,0,0.55);
-backdrop-filter:blur(8px);
-border-radius:12px;
-}
-
-/* TITULO */
-
-h1{
+.card{
+width:90%;
+max-width:360px;
 text-align:center;
-font-size:34px;
-margin-bottom:25px;
+background:rgba(255,255,255,0.03);
+padding:28px;
+border-radius:16px;
+backdrop-filter:blur(10px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* TEXTO */
-
-p{
-font-size:19px;
-line-height:1.8;
-margin-bottom:25px;
-text-align:justify;
+.sub{
+font-size:12px;
+opacity:0.7;
+margin-bottom:15px;
 }
 
-/* IMAGENS */
-
-.image-box{
-margin:30px 0;
+.heart{
+font-size:90px;
+cursor:pointer;
+transition:.15s;
 }
 
-.image-box img{
+.bar{
+height:16px;
+background:#1e293b;
+border-radius:10px;
+overflow:hidden;
+margin-top:20px;
+}
+
+.fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff3b5c,#ff8a4d);
+transition:.3s;
+}
+
+#percent{
+margin-top:10px;
+font-weight:bold;
+}
+
+/* confete */
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+animation:fall 1.5s linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-20px)}
+100%{transform:translateY(600px) rotate(720deg);opacity:0}
+}
+
+/* tela final */
+
+#final{
+position:fixed;
+inset:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+opacity:0;
+pointer-events:none;
+transition:1s;
+padding:30px 20px;
+text-align:center;
+
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.9)),
+url("https://images.unsplash.com/photo-1519681393784-d120267933ba");
+
+background-size:cover;
+background-position:center;
+overflow:auto;
+}
+
+#final.show{
+opacity:1;
+pointer-events:auto;
+}
+
+video{
+width:95%;
+max-width:700px;
+border-radius:14px;
+margin-bottom:30px;
+box-shadow:0 20px 60px rgba(0,0,0,0.8);
+}
+
+.finalText{
+font-size:18px;
+max-width:700px;
+line-height:1.7;
+text-shadow:0 5px 20px rgba(0,0,0,0.8);
+}
+
+.finalText p{
+margin-bottom:20px;
+}
+
+.finalText img{
 width:100%;
 border-radius:12px;
-box-shadow:0 15px 35px rgba(0,0,0,0.6);
+margin:20px 0;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* MOBILE */
-
-@media (max-width:600px){
-
-h1{
-font-size:28px;
-}
-
-p{
-font-size:18px;
-}
-
-.container{
-margin-top:20px;
-padding:20px;
-}
-
+.big{
+font-size:24px;
+font-weight:bold;
 }
 
 </style>
@@ -104,60 +142,156 @@ padding:20px;
 
 <body>
 
-<div class="video-bg">
-<video id="bgVideo" autoplay muted loop playsinline>
-<source src="video.mp4" type="video/mp4">
+<div class="card">
+
+<h2>um site para regina apenas para ela ❤</h2>
+<div class="sub">clica no meu coracaozinho</div>
+
+<div class="heart" id="heart">❤️</div>
+
+<div class="bar">
+<div class="fill" id="fill"></div>
+</div>
+
+<div id="percent">0%</div>
+
+<audio id="sound">
+<source src="YTDown.com_Shorts_pinto-de-cachorro-assado_Media_O8gYAMuwQM4_001_720p-Trim.mp3">
+</audio>
+
+</div>
+
+
+<div id="final">
+
+<video id="videoFinal" playsinline controls>
+<source src="YTDown.com_YouTube_Benson-Boone-Beautiful-Things-Official-M_Media_Oa_RSwwpPaA_001_1080p.mp4">
 </video>
-</div>
 
-<div class="container">
+<div class="finalText">
 
-<h1>João & Regina</h1>
-
-<p>
-Aqui fica o início do seu texto. Ele está com espaçamento maior para leitura confortável,
-principalmente no celular.
-</p>
-
-<div class="image-box">
-<img src="image1.png">
-</div>
+<p><b>OWAIDWADIAODWAIOI MWUBEM, CWMO VC TA??</b></p>
 
 <p>
-Aqui continua o texto da história ou da descrição que você quer colocar no site.
+eu criei esse site bem tuff para me abrir o máximo possível com vc okok  
+(mtmt aura)
 </p>
-
-<div class="image-box">
-<img src="image2.png">
-</div>
 
 <p>
-Mais um trecho do texto. O layout mantém tudo centralizado e bonito
-tanto no celular quanto no computador.
+hoje completou <b>2 meses</b> que eu me sinto taoatoaotaoao feliz ao seu lado.  
+(coisa que passou <b>MTMTMTMT RAPIDO</b> NWOSSA)
 </p>
-
-<div class="image-box">
-<img src="image3.png">
-</div>
 
 <p>
-Aqui fica o final do texto.
+de qualquer forma, isso foi uma coisa que aconteceu mtmtmttmt do nada,
+e sempre tinha me deixado pensativo no começo de:
 </p>
 
+<p><i>"qual a chance disso acontecer comigo?"</i> rsrsrsrsrs</p>
+
+<p>
+pensamento esse que só vai se intensificando
+por o qual <b>perfeita você é na minha visão</b> (eota)
+</p>
+
+<p>
+enfim, saiba que eu sou <b>MUITO grato</b> e <b>MUITO feliz</b>
+por ter vse okokowkok
+</p>
+
+<p class="big">WUTEAMOMUITO ❤</p>
+
+<p>
+E CLWRAMENTE <b>MWAIS DOQ VC</b> OKOK  
+RSRSRSRSRWRAWRS
+</p>
+
+<p>
+e wspero que vse me aguente
+<b>veio e barrigudo</b> tambem rsrsrrsrssrsr
+</p>
+
+<br>
+
+<p><b>eu ouvi que vse ama tomates?</b></p>
+
+<img src="imagem1.png">
+<img src="imagem2.png">
+
+<p><b>rsrssrsrsrsr gwstou dos meus tomates mwu benzinho??</b></p>
+
+<img src="imagem3.png">
+
 </div>
+
+</div>
+
 
 <script>
 
-/* liberar som quando usuário tocar na tela */
+let percent=0
 
-const video = document.getElementById("bgVideo");
+const heart=document.getElementById("heart")
+const fill=document.getElementById("fill")
+const text=document.getElementById("percent")
+const final=document.getElementById("final")
+const sound=document.getElementById("sound")
+const videoFinal=document.getElementById("videoFinal")
 
-document.body.addEventListener("click", function(){
+function confetti(){
 
-video.muted = false;
-video.play();
+for(let i=0;i<40;i++){
 
-},{ once:true });
+let c=document.createElement("div")
+
+c.className="confetti"
+
+c.style.left=Math.random()*100+"vw"
+
+c.style.background=["#ff3b5c","#ffd166","#22c55e","#60a5fa"][Math.floor(Math.random()*4)]
+
+document.body.appendChild(c)
+
+setTimeout(()=>c.remove(),1500)
+
+}
+
+}
+
+heart.onclick=()=>{
+
+if(percent>=100)return
+
+percent+=5
+
+fill.style.width=percent+"%"
+text.innerText=percent+"%"
+
+sound.currentTime=0
+sound.play()
+
+if(navigator.vibrate){
+navigator.vibrate(30)
+}
+
+heart.style.transform="scale(1.3)"
+setTimeout(()=>heart.style.transform="scale(1)",120)
+
+if(percent===100){
+
+confetti()
+
+setTimeout(()=>{
+
+final.classList.add("show")
+
+videoFinal.play()
+
+},700)
+
+}
+
+}
 
 </script>
 
